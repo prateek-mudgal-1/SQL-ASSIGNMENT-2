@@ -44,7 +44,18 @@ city on city.city_id=address.city_id where city="london";
 select title, count(rental_id) as count from film inner join inventory on film.film_id=inventory.inventory_id inner join rental on rental.inventory_id=inventory.inventory_id group by film.title order by count desc limit 5;
 -- question 14) Determine the customers who have rented movies from both stores (store ID 1 and store ID 2). 
 -- solution 14)
-select first_name,last_name from customer where store_id = 1 and store_id = 2;
+SELECT 
+    customer.first_name, customer.last_name
+FROM
+    customer
+        INNER JOIN
+    rental ON customer.customer_id = rental.customer_id
+        INNER JOIN
+    inventory ON inventory.inventory_id = rental.inventory_id
+WHERE
+    inventory.store_id IN (1 , 2)
+GROUP BY customer.customer_id
+HAVING COUNT(DISTINCT inventory.store_id) = 2;
 
 
 
